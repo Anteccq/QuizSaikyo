@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Quiz.cs" />
     <Compile Include="Models\SerialManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
