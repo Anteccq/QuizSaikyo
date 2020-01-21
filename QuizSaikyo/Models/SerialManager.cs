@@ -11,7 +11,7 @@ namespace QuizSaikyo.Models
 {
     public class SerialManager : BindableBase
     {
-        private readonly SerialPort serialPort = new SerialPort("COM3", 9600);
+        private readonly SerialPort _serialPort = new SerialPort("COM3", 9600);
 
         private int _nextData;
         public int NextData
@@ -24,9 +24,9 @@ namespace QuizSaikyo.Models
         {
             try
             {
-                serialPort.NewLine = "\r\n";
-                serialPort.Open();
-                serialPort.DataReceived += (sender, e) => { NextData = ((SerialPort) sender).ReadByte(); };
+                _serialPort.NewLine = "\r\n";
+                _serialPort.Open();
+                _serialPort.DataReceived += (sender, e) => { NextData = ((SerialPort) sender).ReadByte(); };
             }
             catch
             {
@@ -36,8 +36,8 @@ namespace QuizSaikyo.Models
 
         public void PortDispose()
         {
-            if(serialPort.IsOpen) serialPort.Close();
-            serialPort.Dispose();
+            if(_serialPort.IsOpen) _serialPort.Close();
+            _serialPort.Dispose();
         }
     }
 }
