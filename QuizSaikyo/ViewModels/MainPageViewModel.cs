@@ -17,6 +17,18 @@ namespace QuizSaikyo.ViewModels
 
         public ReadOnlyReactiveProperty<int> SerialByte { get; }
 
-        public MainPageViewModel() => SerialByte = SerialManager.ObserveProperty(x => x.NextData).ToReadOnlyReactiveProperty();
+        private Quiz[] quizzes = Quiz.Default;
+
+        public ReactiveProperty<Quiz> CurrentQuiz { get; } = new ReactiveProperty<Quiz>();
+
+        private int quizNum = 0;
+
+        public MainPageViewModel()
+        {
+            SerialByte = SerialManager.ObserveProperty(x => x.NextData).ToReadOnlyReactiveProperty();
+            CurrentQuiz.Value = quizzes[0];
+        }
+
+        public void Next() => CurrentQuiz.Value = quizzes[++quizNum];
     }
 }
