@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -28,9 +29,10 @@ namespace QuizSaikyo.Models
                 _serialPort.Open();
                 _serialPort.DataReceived += (sender, e) => { NextData = ((SerialPort) sender).ReadByte(); };
             }
-            catch
+            catch(Exception e)
             {
-                // ignored
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(SerialPort.GetPortNames());
             }
         }
 
