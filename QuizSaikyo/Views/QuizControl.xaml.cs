@@ -7,6 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -35,13 +36,19 @@ namespace QuizSaikyo.Views
             this.DataContext = MainPageViewModel.CurrentQuiz;
             if (e.Parameter is MainPageViewModel data)
             {
-                data.SerialByte.Throttle(TimeSpan.FromMilliseconds(1000))
+                bool isCorrect = false;
+                data.SerialByte.Throttle(TimeSpan.FromMilliseconds(500))
                     .Where(x => x != 0x00)
+                    .Do(async x =>
+                    {
+                        isCorrect = (x == 0x01) == MainPageViewModel.CurrentQuiz.Value.Correct;
+                        if (isCorrect) await Task.Run( async () => await data.SerialManager.SendSign());
+                    })
                     .ObserveOn(SynchronizationContext.Current)
-                    .Subscribe(serialData =>
+                    .Subscribe(_ =>
                     {
                         Debug.WriteLine("QuizControl Rx");
-                        checkViewModel = new CheckViewModel((serialData == 0x01) == MainPageViewModel.CurrentQuiz.Value.Correct, data.SerialByte);
+                        checkViewModel = new CheckViewModel(isCorrect, data.SerialByte);
                         Frame.Navigate(typeof(CheckPage), checkViewModel);
                     });
             }

@@ -38,7 +38,7 @@ namespace QuizSaikyo.Views
                 this.DataContext = data;
                 data.SerialByte
                     .Where(x => x == 0x00)
-                    .Delay(TimeSpan.FromMilliseconds(2000))
+                    .Delay(TimeSpan.FromMilliseconds(1000))
                     .FirstAsync()
                     .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(_ =>

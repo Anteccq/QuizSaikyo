@@ -18,6 +18,7 @@ namespace QuizSaikyo.Models
     {
         private SerialDevice device;
         public DataReader Reader { get; private set; }
+        public DataWriter Writer { get; private set; }
         private int _nextData;
         public int NextData
         {
@@ -48,15 +49,39 @@ namespace QuizSaikyo.Models
                 }
                 catch
                 {
-                    Debug.WriteLine("Error occured");
+                    Debug.WriteLine("Read Error occured");
                 }
             });
         }
 
+        public async Task SendSign()
+        {
+            await Task.Run(async () =>
+            {
+                do
+                {
+                    try
+                    {
+                        Writer = new DataWriter(device.OutputStream);
+                        Writer.WriteByte(0x01);
+                        await Writer.StoreAsync();
+                    }
+                    catch
+                    {
+                        Debug.WriteLine("Send Error occured");
+                    }
+
+                    await Task.Delay(TimeSpan.FromMilliseconds(80));
+                } while (NextData != 0x00);
+                Debug.WriteLine("Writer Stopped.");
+            }); 
+        }
+
         public void PortDispose()
         {
-            device.Dispose();
-            Reader.Dispose();
+            device?.Dispose();
+            Reader?.Dispose();
+            Writer?.Dispose();
         }
     }
 }
