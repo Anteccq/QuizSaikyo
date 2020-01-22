@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -34,12 +36,17 @@ namespace QuizSaikyo.Views
             if (e.Parameter is CheckViewModel data)
             {
                 this.DataContext = data;
+                data.SerialByte
+                    .Where(x => x == 0x00)
+                    .FirstAsync()
+                    .ObserveOn(SynchronizationContext.Current)
+                    .Subscribe(_ =>
+                    {
+                        Frame.Navigate(typeof(QuizControl));
+                        Debug.WriteLine("CheckPage Rx");
+                    });
             }
             base.OnNavigatedTo(e);
-            Observable.Timer(TimeSpan.FromMilliseconds(3000))
-                .FirstAsync()
-                .ObserveOn(Scheduler.CurrentThread)
-                .Subscribe(_ => Frame.Navigate(typeof(QuizControl)));
         }
     }
 }

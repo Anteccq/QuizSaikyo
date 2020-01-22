@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -33,11 +35,13 @@ namespace QuizSaikyo.Views
             if (e.Parameter is MainPageViewModel data)
             {
                 this.DataContext = data.CurrentQuiz;
-                data.SerialByte.FirstAsync()
-                    .ObserveOn(Scheduler.CurrentThread)
+                data.SerialByte.DistinctUntilChanged().Skip(1)
+                    .Sample(TimeSpan.FromMilliseconds(1000))
+                    .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(serialData =>
                     {
-                        checkViewModel = new CheckViewModel(serialData == 0x01);
+                        Debug.WriteLine("QuizControl Rx");
+                        checkViewModel = new CheckViewModel(serialData == 0x01, data.SerialByte);
                         data.Next();
                         Frame.Navigate(typeof(CheckPage), checkViewModel);
                     });

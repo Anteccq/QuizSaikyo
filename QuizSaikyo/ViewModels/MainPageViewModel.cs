@@ -29,6 +29,6 @@ namespace QuizSaikyo.ViewModels
             CurrentQuiz.Value = quizzes[0];
         }
 
-        public void Next() => CurrentQuiz.Value = quizzes[++quizNum];
+        public void Next() => CurrentQuiz.Value = quizzes[++quizNum % quizzes.Length];
     }
 }

@@ -12,6 +12,9 @@
         <viewmodel:MainPageViewModel />
     </Page.DataContext>
     <Grid>
-        <Frame x:Name="MainContentFrame"/>
+        <StackPanel>
+            <TextBlock Text="{Binding SerialByte.Value}"/>
+            <Frame x:Name="MainContentFrame"/>
+        </StackPanel>
     </Grid>
 </Page>
