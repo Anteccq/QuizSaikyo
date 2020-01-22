@@ -17,11 +17,11 @@ namespace QuizSaikyo.ViewModels
 
         public ReadOnlyReactiveProperty<int> SerialByte { get; }
 
-        private Quiz[] quizzes = Quiz.Default;
+        private static Quiz[] quizzes = Quiz.Default;
 
-        public ReactiveProperty<Quiz> CurrentQuiz { get; } = new ReactiveProperty<Quiz>();
+        public static ReactiveProperty<Quiz> CurrentQuiz { get; } = new ReactiveProperty<Quiz>();
 
-        private int quizNum = 0;
+        private static int quizNum = 0;
 
         public MainPageViewModel()
         {
@@ -29,6 +29,6 @@ namespace QuizSaikyo.ViewModels
             CurrentQuiz.Value = quizzes[0];
         }
 
-        public void Next() => CurrentQuiz.Value = quizzes[++quizNum % quizzes.Length];
+        public static void Next() => CurrentQuiz.Value = quizzes[++quizNum % quizzes.Length];
     }
 }
