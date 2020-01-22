@@ -32,17 +32,16 @@ namespace QuizSaikyo.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            this.DataContext = MainPageViewModel.CurrentQuiz;
             if (e.Parameter is MainPageViewModel data)
             {
-                this.DataContext = data.CurrentQuiz;
-                data.SerialByte.DistinctUntilChanged().Skip(1)
-                    .Sample(TimeSpan.FromMilliseconds(1000))
+                data.SerialByte.Throttle(TimeSpan.FromMilliseconds(1000))
+                    .Where(x => x != 0x00)
                     .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(serialData =>
                     {
                         Debug.WriteLine("QuizControl Rx");
-                        checkViewModel = new CheckViewModel(serialData == 0x01, data.SerialByte);
-                        data.Next();
+                        checkViewModel = new CheckViewModel((serialData == 0x01) == MainPageViewModel.CurrentQuiz.Value.Correct, data.SerialByte);
                         Frame.Navigate(typeof(CheckPage), checkViewModel);
                     });
             }

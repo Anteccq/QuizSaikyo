@@ -12,7 +12,7 @@
     <Grid>
         <StackPanel>
             <TextBlock Text="{Binding Value.Content}"/>
-            <TextBlock Text="どちらかに置け。そして黙って消えろ。"/>
+            <TextBlock Text="〇× どちらかの皿に雪だるまを乗っけてね！"/>
         </StackPanel>
     </Grid>
 </Page>

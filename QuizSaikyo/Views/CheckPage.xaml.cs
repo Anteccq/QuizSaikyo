@@ -38,10 +38,12 @@ namespace QuizSaikyo.Views
                 this.DataContext = data;
                 data.SerialByte
                     .Where(x => x == 0x00)
+                    .Delay(TimeSpan.FromMilliseconds(2000))
                     .FirstAsync()
                     .ObserveOn(SynchronizationContext.Current)
                     .Subscribe(_ =>
                     {
+                        MainPageViewModel.Next();
                         Frame.Navigate(typeof(QuizControl));
                         Debug.WriteLine("CheckPage Rx");
                     });
