@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Enumeration;
+using Windows.Devices.SerialCommunication;
+using Windows.Storage.Streams;
 using Prism.Mvvm;
 using Reactive.Bindings;
 
@@ -11,8 +16,8 @@ namespace QuizSaikyo.Models
 {
     public class SerialManager : BindableBase
     {
-        private readonly SerialPort _serialPort = new SerialPort("COM3", 9600);
-
+        private SerialDevice device;
+        public DataReader Reader { get; private set; }
         private int _nextData;
         public int NextData
         {
@@ -20,24 +25,38 @@ namespace QuizSaikyo.Models
             set => SetProperty(ref _nextData, value);
         }
 
-        public SerialManager()
+        public async Task PortInitializeAsync()
         {
-            try
+            var portData = SerialDevice.GetDeviceSelector("COM3");
+            var myDevice = await DeviceInformation.FindAllAsync(portData, null);
+            device = await SerialDevice.FromIdAsync(myDevice[0].Id);
+            device.BaudRate = 9600;
+            device.DataBits = 8;
+            device.StopBits = SerialStopBitCount.One;
+            device.Parity = SerialParity.None;
+            device.Handshake = SerialHandshake.None;
+            device.ReadTimeout = TimeSpan.FromMilliseconds(1);
+            device.WriteTimeout = TimeSpan.FromMilliseconds(1);
+            Observable.Timer(TimeSpan.Zero, TimeSpan.FromMilliseconds(200)).Subscribe(async i =>
             {
-                _serialPort.NewLine = "\r\n";
-                _serialPort.Open();
-                _serialPort.DataReceived += (sender, e) => { NextData = ((SerialPort) sender).ReadByte(); };
-            }
-            catch
-            {
-                // ignored
-            }
+                try
+                {
+                    Reader = new DataReader(device.InputStream);
+                    await Reader.LoadAsync(128);
+                    var rec = Reader.ReadByte();
+                    NextData = rec;
+                }
+                catch
+                {
+                    Debug.WriteLine("Error occured");
+                }
+            });
         }
 
         public void PortDispose()
         {
-            if(_serialPort.IsOpen) _serialPort.Close();
-            _serialPort.Dispose();
+            device.Dispose();
+            Reader.Dispose();
         }
     }
 }
