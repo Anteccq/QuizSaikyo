@@ -47,6 +47,7 @@ namespace QuizSaikyo.Views
                         Frame.Navigate(typeof(QuizControl));
                         Debug.WriteLine("CheckPage Rx");
                     });
+                this.Grid.Background = data.IsCorrect ? OkBackGround : NgBackGround;
             }
             base.OnNavigatedTo(e);
         }

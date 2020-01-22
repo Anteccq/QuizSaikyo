@@ -7,8 +7,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <Grid>
+    <Page.Resources>
+        <SolidColorBrush x:Name="OkBackGround" Color="DimGray"/>
+        <SolidColorBrush x:Name="NgBackGround" Color="DarkBlue"/>
+    </Page.Resources>
+    <Grid x:Name="Grid">
         <StackPanel>
             <TextBlock Text="{Binding Text}" FontSize="50"/>
         </StackPanel>
