@@ -17,7 +17,7 @@ namespace QuizSaikyo.ViewModels
         public CheckViewModel(bool isCorrect, ReadOnlyReactiveProperty<int> serialByte)
         {
             IsCorrect = isCorrect;
-            Text = isCorrect ? "やるじゃねえか" : "は？";
+            Text = isCorrect ? "正解" : "不正解";
             SerialByte = serialByte;
         }
     }

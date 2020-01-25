@@ -6,13 +6,29 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignHeight="600"
+    d:DesignWidth="800">
     
-    <Grid Margin="4" Background="DarkSlateGray">
+    <Grid Margin="4" Background="#FF343434">
         <StackPanel>
-            <TextBlock Text="{Binding Value.Content}"/>
-            <TextBlock Text="〇× どちらかの皿に雪だるまを乗っけてね！"/>
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="TextAlignment" Value="Center"/>
+                    <Setter Property="FontSize" Value="30"/>
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock Text="問題" HorizontalAlignment="Center" FontSize="125" TextAlignment="Center"/>
+            <TextBlock Text="{Binding Value.Content}" FontSize="60" TextWrapping="Wrap"/>
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="〇" FontSize="100" Foreground="Red" FontWeight="Bold"/>
+                <TextBlock Grid.Column="1" FontSize="100" Text="✕" Foreground="Blue" FontWeight="Bold"/>
+            </Grid>
+            <TextBlock Text="〇× どちらかの皿に雪だるまを乗っけてね！" FontSize="30"/>
         </StackPanel>
     </Grid>
 </Page>

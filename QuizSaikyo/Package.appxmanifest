@@ -8,8 +8,8 @@
 
   <Identity
     Name="571b9161-d4f5-4bcb-be5e-e403900decd6"
-    Publisher="CN=AntiqueR"
-    Version="1.0.0.0" />
+    Publisher="CN=QuizSaikyoGroup"
+    Version="1.0.7.0" />
 
   <mp:PhoneIdentity PhoneProductId="571b9161-d4f5-4bcb-be5e-e403900decd6" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

@@ -17,6 +17,11 @@ namespace QuizSaikyo.Models
             Correct = correct;
         }
 
-        public static Quiz[] Default => new[]{new Quiz("正解はTrue", true),new Quiz("正解はFalse", false),new Quiz("次にあなたがいう言葉はFalseですね", false)  };
+        public static Quiz[] Default => new[]{
+            new Quiz("チャレンジラボの2階にはAIラボがある", true),
+            new Quiz("扇が丘キャンパスには食堂が2つある", true), 
+            new Quiz("やつかほリサーチキャンパスには、「ACQUA」2号店がある", false),
+            new Quiz("次にあなたが雪だるまを置くのは X である", false)
+        };
     }
 }
